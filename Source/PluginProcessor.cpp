@@ -24,6 +24,16 @@ _19tetsynthAudioProcessor::_19tetsynthAudioProcessor()
                        )
 #endif
 {
+    synth.clearVoices();
+    
+    for (int i = 0; i < numVoices; i++ ) {
+        synth.addVoice(new SynthVoice());
+    }
+    
+    synth.clearSounds();
+    
+    synth.addSound(new SynthSound());
+    
 }
 
 _19tetsynthAudioProcessor::~_19tetsynthAudioProcessor()
@@ -97,6 +107,11 @@ void _19tetsynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
 {
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
+    ignoreUnused(samplesPerBlock);
+    lastSampleRate = sampleRate;
+    synth.setCurrentPlaybackSampleRate(lastSampleRate);
+    
+    
 }
 
 void _19tetsynthAudioProcessor::releaseResources()
@@ -131,6 +146,9 @@ bool _19tetsynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layou
 
 void _19tetsynthAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
+    buffer.clear();
+    synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+    
     ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();

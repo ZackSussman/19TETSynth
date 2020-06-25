@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "SynthVoice.h"
 
 //==============================================================================
 /**
@@ -56,6 +57,15 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    
+    Synthesiser synth;
+    SynthVoice voice;
+    double lastSampleRate;
+
+public:
+    int numVoices = 12;
+    
+    
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (_19tetsynthAudioProcessor)
 };
