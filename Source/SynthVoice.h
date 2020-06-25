@@ -12,6 +12,7 @@
 #include <JuceHeader.h>
 #include <cmath>
 #include "SynthSound.h"
+#include "PluginProcessor.h"
 
 class SynthVoice : public SynthesiserVoice {
 
@@ -21,11 +22,14 @@ public:
         return dynamic_cast<SynthSound*>(sound) != nullptr;
     }
     
-    void startNote (int midiNoteNumber, float velocity, SynthesiserSound* sound, int currentPitchWheelPosition) {
+    void startNote (int midiNoteNumber, float velocity, SynthesiserSound* sound, int currentPitchWheelPosition)
+    {
+        level = velocity;
         frequency = convertMidiNumberToFrequencyModeOne(midiNoteNumber);
     }
     
     void stopNote (float velocity, bool allowTailOff) {
+        level = 0;
         clearCurrentNote();
     }
     
@@ -39,11 +43,26 @@ public:
     
     void renderNextBlock (AudioBuffer<float>& outputBuffer,int startSample,int numSamples) {
         
+        double sampleRate = getSampleRate();
+        
+        for (int sample = 0; sample < numSamples; ++sample) {
+            double signal = level*(double)sinf(frequency*2*M_PI*(sampleNumber/sampleRate));
+            for (int channel = 0; channel  < outputBuffer.getNumChannels(); ++channel) {
+                outputBuffer.addSample(channel, startSample, signal);
+                //outputBuffer.addSample(channel, startSample, signal);
+            }
+            sampleNumber++;
+            ++startSample;
+        }
+        
     }
     
 private:
-    double level;
-    double frequency;
+    double level = 0.5;
+    double frequency = 440;
+    int sampleNumber = 0;
+    
+
     
     double convertMidiNumberToFrequencyModeOne(int midiNumber) {
         int steps[12] = {1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2};

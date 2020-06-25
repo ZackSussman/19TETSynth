@@ -60,11 +60,11 @@ private:
     
     Synthesiser synth;
     SynthVoice voice;
-    double lastSampleRate;
+    
 
 public:
     int numVoices = 12;
-    
+    double lastSampleRate;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (_19tetsynthAudioProcessor)
