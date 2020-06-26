@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "SynthVoice.h"
+#include "ProcessorInfo.h"
 
 //==============================================================================
 /**
@@ -48,6 +49,7 @@ public:
     //==============================================================================
     int getNumPrograms() override;
     int getCurrentProgram() override;
+    void fixMyInfo(ProcessorInfo** pointer);
     void setCurrentProgram (int index) override;
     const String getProgramName (int index) override;
     void changeProgramName (int index, const String& newName) override;
@@ -61,10 +63,12 @@ private:
     Synthesiser synth;
     SynthVoice voice;
     
+    
 
 public:
     int numVoices = 12;
     double lastSampleRate;
+    ProcessorInfo* info = new ProcessorInfo();
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (_19tetsynthAudioProcessor)

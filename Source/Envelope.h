@@ -48,6 +48,12 @@ public:
         
     }
     
+    void saveSound() {
+        if (time < attackTime + decayTime + sustainTime) {
+            time = attackTime + decayTime + sustainTime;
+        }
+    }
+    
     double preform(double input){
         if (stage == attack) {
             return input*relativeAttackLevel*(time/attackTime);
@@ -71,6 +77,29 @@ public:
         time = 0;
         
     }
+    
+    void changeAttackTime(double newTime) {
+        attackTime = newTime;
+    }
+    void changeDecayTime(double newTime) {
+        decayTime = newTime;
+    }
+    void changeSustainTime(double newTime) {
+        sustainTime = newTime;
+    }
+    void changeReleaseTime(double newTime) {
+        releaseTime = newTime;
+    }
+    void changeAttackLevel(double newLevel) {
+        relativeAttackLevel = newLevel;
+    }
+    void changeDecayLevel(double newLevel) {
+        relativeDecayLevel = newLevel;
+    }
+    void changeReleaseLevel(double newLevel) {
+        relativeReleaseLevel = newLevel;
+    }
+    
     
     void update() {
         time += .01;

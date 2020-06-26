@@ -6,6 +6,7 @@
     <GROUP id="{800DA7DC-73F9-A996-0BAA-70034A6F99C9}" name="Source">
       <FILE id="Cw6b0w" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
+      <FILE id="XVPRMJ" name="ProcessorInfo.h" compile="0" resource="0" file="Source/ProcessorInfo.h"/>
       <FILE id="Fg5UUr" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
       <FILE id="OU0WTo" name="PluginEditor.cpp" compile="1" resource="0"

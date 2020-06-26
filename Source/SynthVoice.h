@@ -14,10 +14,19 @@
 #include "SynthSound.h"
 #include "PluginProcessor.h"
 #include "Envelope.h"
+#include "ProcessorInfo.h"
 
 class SynthVoice : public SynthesiserVoice {
 
 public:
+
+    SynthVoice(ProcessorInfo* passedInfo){
+        info = passedInfo;
+    }
+    
+    SynthVoice(){
+        
+    }
     
     bool canPlaySound (SynthesiserSound* sound) {
         return dynamic_cast<SynthSound*>(sound) != nullptr;
@@ -31,7 +40,7 @@ public:
     }
     
     void stopNote (float velocity, bool allowTailOff) {
-        level = 0;
+        envelope->saveSound();
         clearCurrentNote();
     }
     
@@ -56,17 +65,23 @@ public:
             sampleNumber++;
             ++startSample;
             envelope->update();
+            
+            envelope->changeAttackTime(info->getAttackTime());
+            envelope->changeDecayTime(info->getDecayTime());
+            envelope->changeSustainTime(info->getSustainTime());
+            envelope->changeReleaseTime(info->getReleaseTime());
+             
         }
-        
     }
+    
+public:
+    ProcessorInfo* info;
     
 private:
     double level = 0.5;
     double frequency = 440;
     int sampleNumber = 0;
-    Envelope* envelope = new Envelope(.1, 1, .1, .8, 10, .1, 0);
-    
-
+    Envelope* envelope = new Envelope(2, 1, .1, .8, 50, 2, 0);
     
     double convertMidiNumberToFrequencyModeOne(int midiNumber) {
         int steps[12] = {1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2};

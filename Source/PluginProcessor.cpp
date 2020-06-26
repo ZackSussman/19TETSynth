@@ -22,12 +22,14 @@ _19tetsynthAudioProcessor::_19tetsynthAudioProcessor()
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
                        )
+
 #endif
 {
+    
     synth.clearVoices();
     
     for (int i = 0; i < numVoices; i++ ) {
-        synth.addVoice(new SynthVoice());
+        synth.addVoice(new SynthVoice(info));
     }
     
     synth.clearSounds();
@@ -144,11 +146,14 @@ bool _19tetsynthAudioProcessor::isBusesLayoutSupported (const BusesLayout& layou
 }
 #endif
 
+void _19tetsynthAudioProcessor:: fixMyInfo(ProcessorInfo** pointer) {
+    *pointer = info;
+}
+
 void _19tetsynthAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     buffer.clear();
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-    
     //ScopedNoDenormals noDenormals;
     //auto totalNumInputChannels  = getTotalNumInputChannels();
     //auto totalNumOutputChannels = getTotalNumOutputChannels();

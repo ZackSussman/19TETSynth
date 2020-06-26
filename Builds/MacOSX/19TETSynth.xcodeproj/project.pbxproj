@@ -291,6 +291,13 @@
 			path = "/Users/zack/Documents/JUCE/modules/juce_audio_utils";
 			sourceTree = "<absolute>";
 		};
+		48F37576A937FAD6D9B27425 = {
+			isa = PBXFileReference;
+			lastKnownFileType = file;
+			name = "juce_opengl";
+			path = "/Users/zack/Documents/JUCE/modules/juce_opengl";
+			sourceTree = "<absolute>";
+		};
 		4A5CA35D9B415BD7287CCD62 = {
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.cpp.objcpp;
@@ -304,41 +311,6 @@
 			name = SynthSound.h;
 			path = ../../Source/SynthSound.h;
 			sourceTree = "SOURCE_ROOT";
-		};
-		7A9070198C87A15BCC9DE4D8 = {
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = Envelope.h;
-			path = ../../Source/Envelope.h;
-			sourceTree = "SOURCE_ROOT";
-		};
-		7C8F6956AA21A7C91FD81FFC = {
-			isa = PBXFileReference;
-			lastKnownFileType = text.plist.xml;
-			name = "Info-AU.plist";
-			path = "Info-AU.plist";
-			sourceTree = "SOURCE_ROOT";
-		};
-		C5821D2A9CCC65D3D11F6104 = {
-			isa = PBXFileReference;
-			explicitFileType = wrapper.cfbundle;
-			includeInIndex = 0;
-			path = 19TETSynth.vst3;
-			sourceTree = "BUILT_PRODUCTS_DIR";
-		};
-		3EEA0F8302EE361AE23F01EA = {
-			isa = PBXFileReference;
-			explicitFileType = wrapper.cfbundle;
-			includeInIndex = 0;
-			path = 19TETSynth.component;
-			sourceTree = "BUILT_PRODUCTS_DIR";
-		};
-		48F37576A937FAD6D9B27425 = {
-			isa = PBXFileReference;
-			lastKnownFileType = file;
-			name = "juce_opengl";
-			path = "/Users/zack/Documents/JUCE/modules/juce_opengl";
-			sourceTree = "<absolute>";
 		};
 		51F8213D5ECCA4F86F4A47E4 = {
 			isa = PBXFileReference;
@@ -368,19 +340,26 @@
 			path = "../../JuceLibraryCode/include_juce_cryptography.mm";
 			sourceTree = "SOURCE_ROOT";
 		};
-		686DCC59A034A1BE651CB435 = {
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.cpp.objcpp;
-			name = "include_juce_gui_basics.mm";
-			path = "../../JuceLibraryCode/include_juce_gui_basics.mm";
-			sourceTree = "SOURCE_ROOT";
-		};
 		70DA8B508B0D07947FB47563 = {
 			isa = PBXFileReference;
 			lastKnownFileType = file;
 			name = "juce_data_structures";
 			path = "/Users/zack/Documents/JUCE/modules/juce_data_structures";
 			sourceTree = "<absolute>";
+		};
+		7A9070198C87A15BCC9DE4D8 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = Envelope.h;
+			path = ../../Source/Envelope.h;
+			sourceTree = "SOURCE_ROOT";
+		};
+		7C8F6956AA21A7C91FD81FFC = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.xml;
+			name = "Info-AU.plist";
+			path = "Info-AU.plist";
+			sourceTree = "SOURCE_ROOT";
 		};
 		7F083AFC533A2BEF42916C21 = {
 			isa = PBXFileReference;
@@ -396,6 +375,34 @@
 			path = "../../JuceLibraryCode/include_juce_core.mm";
 			sourceTree = "SOURCE_ROOT";
 		};
+		8620BF6C980C30BF3A132CEE = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.cpp;
+			name = PluginEditor.cpp;
+			path = ../../Source/PluginEditor.cpp;
+			sourceTree = "SOURCE_ROOT";
+		};
+		C5821D2A9CCC65D3D11F6104 = {
+			isa = PBXFileReference;
+			explicitFileType = wrapper.cfbundle;
+			includeInIndex = 0;
+			path = 19TETSynth.vst3;
+			sourceTree = "BUILT_PRODUCTS_DIR";
+		};
+		3EEA0F8302EE361AE23F01EA = {
+			isa = PBXFileReference;
+			explicitFileType = wrapper.cfbundle;
+			includeInIndex = 0;
+			path = 19TETSynth.component;
+			sourceTree = "BUILT_PRODUCTS_DIR";
+		};
+		686DCC59A034A1BE651CB435 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.cpp.objcpp;
+			name = "include_juce_gui_basics.mm";
+			path = "../../JuceLibraryCode/include_juce_gui_basics.mm";
+			sourceTree = "SOURCE_ROOT";
+		};
 		81130809E4BEF18D75A97806 = {
 			isa = PBXFileReference;
 			explicitFileType = wrapper.application;
@@ -408,13 +415,6 @@
 			lastKnownFileType = sourcecode.c.h;
 			name = PluginProcessor.h;
 			path = ../../Source/PluginProcessor.h;
-			sourceTree = "SOURCE_ROOT";
-		};
-		8620BF6C980C30BF3A132CEE = {
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.cpp.cpp;
-			name = PluginEditor.cpp;
-			path = ../../Source/PluginEditor.cpp;
 			sourceTree = "SOURCE_ROOT";
 		};
 		8C59F4FD273D974B5F59409C = {
@@ -479,6 +479,13 @@
 			name = QuartzCore.framework;
 			path = System/Library/Frameworks/QuartzCore.framework;
 			sourceTree = SDKROOT;
+		};
+		ACDE719A613D42B3A758F243 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = ProcessorInfo.h;
+			path = ../../Source/ProcessorInfo.h;
+			sourceTree = "SOURCE_ROOT";
 		};
 		BF97DD5F27C275E7E7F32D1E = {
 			isa = PBXFileReference;
@@ -617,6 +624,7 @@
 			isa = PBXGroup;
 			children = (
 				C644C5D07398DB431C20C3B5,
+				ACDE719A613D42B3A758F243,
 				8175CDE532974D07926EF747,
 				8620BF6C980C30BF3A132CEE,
 				4AC9B3FEA35276B10A8A4D29,
