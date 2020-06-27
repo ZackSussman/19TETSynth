@@ -18,9 +18,13 @@ class Envelope {
 public:
     double attackTime = .1;
     double relativeAttackLevel = 1;
-    
+    double fixyTime = 0;
+    double lastSignal;
+    bool noteReleased;
     double decayTime = .05;
     double relativeDecayLevel = .8;
+    
+    bool mustEndSoundSmoothlyAndPromptly = false;
 
     double sustainTime = 1;
     
@@ -48,34 +52,45 @@ public:
         
     }
     
-    void saveSound() {
-        if (time < attackTime + decayTime + sustainTime) {
-            time = attackTime + decayTime + sustainTime;
-        }
+    void endVelope() {
+        time = attackTime + sustainTime + releaseTime;
+        stage = release;
     }
     
-    double preform(double input){
+    double preform(double input, bool isKeyDown){
+        
+        
+        
+        if (isKeyDown && sustainTime == 100) {
+            time = attackTime + releaseTime;
+            stage = sustain;
+        }
+        
         if (stage == attack) {
+            lastSignal = input*relativeAttackLevel*(time/attackTime);
             return input*relativeAttackLevel*(time/attackTime);
         }
         else if (stage == decay) {
+            lastSignal = input*relativeAttackLevel - (relativeAttackLevel - relativeDecayLevel)*input*((time - attackTime)/(decayTime)) ;
             return input*relativeAttackLevel - (relativeAttackLevel - relativeDecayLevel)*input*((time - attackTime)/(decayTime)) ;
         }
         else if (stage == sustain) {
+            lastSignal = input*relativeDecayLevel;
             return input*relativeDecayLevel;
         }
         else if (stage == release) {
+            lastSignal = input*relativeDecayLevel - (relativeDecayLevel - relativeReleaseLevel)*input*((time - decayTime - attackTime -sustainTime)/(releaseTime)) ;
             return input*relativeDecayLevel - (relativeDecayLevel - relativeReleaseLevel)*input*((time - decayTime - attackTime - sustainTime)/(releaseTime)) ;
         }
         else {
             return 0;
         }
         
+      
     }
     
     void beginningOfNote() {
         time = 0;
-        
     }
     
     void changeAttackTime(double newTime) {
@@ -118,6 +133,7 @@ public:
         else {
             stage = off;
         }
+        
     }
     
     

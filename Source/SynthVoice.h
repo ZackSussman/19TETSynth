@@ -40,7 +40,7 @@ public:
     }
     
     void stopNote (float velocity, bool allowTailOff) {
-        envelope->saveSound();
+        envelope->endVelope();
         clearCurrentNote();
     }
     
@@ -57,7 +57,11 @@ public:
         double sampleRate = getSampleRate();
         
         for (int sample = 0; sample < numSamples; ++sample) {
-            double signal = envelope->preform(level*(double)sinf(frequency*2*M_PI*(sampleNumber/sampleRate)));
+            double signal = envelope->preform(.05*(double)sinf(frequency*2*M_PI*(sampleNumber/sampleRate)), isKeyDown());
+            
+            if (signal > 1) {
+                signal = signal/abs(signal);
+            }
             for (int channel = 0; channel  < outputBuffer.getNumChannels(); ++channel) {
                 outputBuffer.addSample(channel, startSample, signal);
                 //outputBuffer.addSample(channel, startSample, signal);
@@ -65,13 +69,13 @@ public:
             sampleNumber++;
             ++startSample;
             envelope->update();
-            
-            envelope->changeAttackTime(info->getAttackTime());
-            envelope->changeDecayTime(info->getDecayTime());
-            envelope->changeSustainTime(info->getSustainTime());
-            envelope->changeReleaseTime(info->getReleaseTime());
-             
+ 
         }
+        
+        envelope->changeAttackTime(info->getAttackTime());
+        envelope->changeDecayTime(info->getDecayTime());
+        envelope->changeSustainTime(info->getSustainTime());
+        envelope->changeReleaseTime(info->getReleaseTime());
     }
     
 public:

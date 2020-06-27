@@ -153,6 +153,7 @@ void _19tetsynthAudioProcessor:: fixMyInfo(ProcessorInfo** pointer) {
 void _19tetsynthAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
     buffer.clear();
+    
     synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
     //ScopedNoDenormals noDenormals;
     //auto totalNumInputChannels  = getTotalNumInputChannels();
