@@ -14,11 +14,12 @@
 #include "PluginProcessor.h"
 #include "ProcessorInfo.h"
 #include "SustainIndicatorLine.h"
+#include "PianoKeys.h"
 
 //==============================================================================
 /**
 */
-class _19tetsynthAudioProcessorEditor  : public AudioProcessorEditor, public Slider::Listener
+class _19tetsynthAudioProcessorEditor  : public AudioProcessorEditor, public Slider::Listener, public ProcessorInfo::Listener, public Button::Listener
 
 {
 public:
@@ -30,6 +31,7 @@ public:
     void resized() override;
     ProcessorInfo* info;
     void sliderValueChanged(Slider* slider) override;
+    void buttonClicked(Button* button) override;
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -38,6 +40,8 @@ private:
     
 
     Path adsrOutline;
+    
+    Path modesOutline;
     
     SustainIndicatorLine sustainCutoff;
     
@@ -53,7 +57,15 @@ private:
     Slider releaseSlider;
     Label releaseLabel;
     
+    TextButton modeOneButton;
+    TextButton modeTwoButton;
+    TextButton modeThreeButton;
     
+    void noteOn();
+    void noteOff();
+    
+    
+    PianoKeys keys;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (_19tetsynthAudioProcessorEditor)
 };

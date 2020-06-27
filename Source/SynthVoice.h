@@ -31,17 +31,33 @@ public:
     bool canPlaySound (SynthesiserSound* sound) {
         return dynamic_cast<SynthSound*>(sound) != nullptr;
     }
-    
+ 
     void startNote (int midiNoteNumber, float velocity, SynthesiserSound* sound, int currentPitchWheelPosition)
     {
-        level = velocity;
-        frequency = convertMidiNumberToFrequencyModeOne(midiNoteNumber);
         envelope->beginningOfNote();
+        int note = convertMidiNumberToNineteenNumberModeOne(midiNoteNumber);
+        info->notesOn[note] = true;
+        lastNoteNumber = note;
+        level = velocity;
+        if (info->mode == info->SynthMode::left) {
+            frequency = convertMidiNumberToFrequencyModeOne(midiNoteNumber);
+        }
+        else if (info->mode == info->SynthMode::right) {
+            frequency = convertMidiNumberToFrequencyModeTwo(midiNoteNumber);
+        }
+        else {
+            frequency = 440*pow(2, ((midiNoteNumber-69)*1.0)/19);
+        }
+        
+        info->notifyListenersNoteOn();
+        
     }
     
     void stopNote (float velocity, bool allowTailOff) {
         envelope->endVelope();
         clearCurrentNote();
+        info->notesOn[lastNoteNumber] = false;
+        info->notifyListenersNoteOff();
     }
     
     void pitchWheelMoved (int newPitchWheelValue) {
@@ -86,6 +102,8 @@ private:
     double frequency = 440;
     int sampleNumber = 0;
     Envelope* envelope = new Envelope(2, 1, .1, .8, 50, 2, 0);
+    int lastNoteNumber = 0;
+    
     
     double convertMidiNumberToFrequencyModeOne(int midiNumber) {
         int steps[12] = {1, 2, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2};
@@ -108,5 +126,41 @@ private:
         
         return 440*(pow(2.0, numerator*1.0/19.0));
     }
+    
+    double convertMidiNumberToFrequencyModeTwo(int midiNumber) {
+        int steps[12] = {2, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 1};
+        int relativeToAPitch = midiNumber - 69;
+        int cycle = (relativeToAPitch) % 12;
+        int numerator = 0;
+        
+        if (relativeToAPitch >= 0) {
+            for (int i = 0; i < cycle; i++) {
+                numerator += steps[i];
+            }
+            numerator += ((midiNumber - 9)/12 - 5)*19 ;
+        }
+        else {
+            for (int i = 0; i < abs(cycle); i++) {
+                numerator -= steps[11 - i];
+            }
+            numerator -= (5 - ceil(1.0*(midiNumber - 9)/(1.0*12)))*19 ;
+        }
+        
+        return 440*(pow(2.0, numerator*1.0/19.0));
+    }
+    
+    
+    int convertMidiNumberToNineteenNumberModeOne(int midiNumber) {
+        int twelveNumber = midiNumber%12;
+        int lookUp[12] = {0, 1, 3, 4, 6, 8, 9, 11, 12, 14, 15, 17};
+        return lookUp[twelveNumber];
+    }
+    
+    int convertMidiNumberToNineteenNumberModeTwo(int midiNumber) {
+        int twelveNumber = midiNumber%12;
+        int lookUp[12] = {0, 2, 3, 5, 7, 8, 10, 11, 13, 14, 16, 18};
+        return lookUp[twelveNumber];
+    }
+    
     
 };

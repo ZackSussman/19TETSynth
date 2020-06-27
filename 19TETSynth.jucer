@@ -17,6 +17,8 @@
             file="Source/SustainIndicatorLine.cpp"/>
       <FILE id="OhHkMc" name="SustainIndicatorLine.h" compile="0" resource="0"
             file="Source/SustainIndicatorLine.h"/>
+      <FILE id="eetKsk" name="PianoKeys.cpp" compile="1" resource="0" file="Source/PianoKeys.cpp"/>
+      <FILE id="Yp1R00" name="PianoKeys.h" compile="0" resource="0" file="Source/PianoKeys.h"/>
       <FILE id="GOSCEy" name="Envelope.h" compile="0" resource="0" file="Source/Envelope.h"/>
       <FILE id="TtrsDq" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>

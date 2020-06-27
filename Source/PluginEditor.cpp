@@ -10,7 +10,6 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include <iostream>
 //==============================================================================
 _19tetsynthAudioProcessorEditor::_19tetsynthAudioProcessorEditor (_19tetsynthAudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p)
@@ -25,6 +24,10 @@ _19tetsynthAudioProcessorEditor::_19tetsynthAudioProcessorEditor (_19tetsynthAud
     addAndMakeVisible(sustainCutoff, 0);
     sustainCutoff.setBounds(getLocalBounds());
     
+    info->addListener(this);
+    modeOneButton.addListener(this);
+    modeTwoButton.addListener(this);
+    modeThreeButton.addListener(this);
     addAndMakeVisible(decaySlider, 1);
     addAndMakeVisible(sustainSlider, 1);
     addAndMakeVisible(releaseSlider, 1);
@@ -75,8 +78,28 @@ _19tetsynthAudioProcessorEditor::_19tetsynthAudioProcessorEditor (_19tetsynthAud
     decaySlider.setValue(.1);
     sustainSlider.setValue(20);
     
-
+    addAndMakeVisible(keys, 0);
+    keys.setBounds(getLocalBounds());
+    
+    addAndMakeVisible(modeOneButton);
+    addAndMakeVisible(modeTwoButton);
+    addAndMakeVisible(modeThreeButton);
+    
+    modeOneButton.setSize(getWidth()/8, (-38 + 6*getHeight()/20)/3);
+    modeTwoButton.setSize(getWidth()/8, (-38 + 6*getHeight()/20)/3);
+    modeThreeButton.setSize(getWidth()/8, (-38 + 6*getHeight()/20)/3);
+    
+    modeOneButton.setButtonText("flat mode");
+    modeTwoButton.setButtonText("sharp mode");
+    modeThreeButton.setButtonText("all mode");
+    
+    modeOneButton.setTopLeftPosition(5*getWidth()/7 + 20, 13*getHeight()/20 + 20);
+    modeTwoButton.setTopLeftPosition(5*getWidth()/7 + 20, 13*getHeight()/20 + +20 + (-38 + 6*getHeight()/20)/3);
+    modeThreeButton.setTopLeftPosition(5*getWidth()/7 + 20, 13*getHeight()/20 +  + 20 + 2*(-38 + 6*getHeight()/20)/3);
+    
 }
+
+
 
 _19tetsynthAudioProcessorEditor::~_19tetsynthAudioProcessorEditor()
 {
@@ -102,8 +125,46 @@ void _19tetsynthAudioProcessorEditor::paint (Graphics& g)
     adsrOutline.closeSubPath();
     g.strokePath(adsrOutline, PathStrokeType(3));
     
-
     
+    modesOutline.clear();
+    modesOutline.startNewSubPath(5*getWidth()/7 + 20, 13*getHeight()/20 + 20);
+    modesOutline.lineTo(getWidth()/8 + 5*getWidth()/7 + 20, 13*getHeight()/20 + 20);
+    modesOutline.lineTo(getWidth()/8 + 5*getWidth()/7 + 20, 13*getHeight()/20 +  + 20 + 2*(-38 + 6*getHeight()/20)/3 + (-38 + 6*getHeight()/20)/3);
+    modesOutline.lineTo(5*getWidth()/7 + 20, 13*getHeight()/20 +  + 20 + 2*(-38 + 6*getHeight()/20)/3 + (-38 + 6*getHeight()/20)/3);
+    modesOutline.closeSubPath();
+    g.strokePath(modesOutline, PathStrokeType(3));
+    
+    for (int index = 0; index < 19; index++) {
+        keys.notesOn[index] = info->notesOn[index];
+    }
+    
+}
+
+void _19tetsynthAudioProcessorEditor::buttonClicked(Button* button) {
+    if (&modeOneButton == button) {
+        info->mode = info->SynthMode::left;
+    }
+    else if (button == &modeTwoButton) {
+        info->mode = info->SynthMode::right;
+    }
+    else {
+        info->mode = info->SynthMode::both;
+    }
+    MessageManager::getInstance()->callAsync([this](){
+        keys.paintAgain();
+    });
+}
+
+void _19tetsynthAudioProcessorEditor::noteOn() {
+    MessageManager::getInstance()->callAsync([this](){
+        keys.paintAgain();
+    });
+}
+
+void _19tetsynthAudioProcessorEditor::noteOff() {
+    MessageManager::getInstance()->callAsync([this](){
+        keys.paintAgain();
+    });
 }
 
 void _19tetsynthAudioProcessorEditor::resized()
@@ -123,10 +184,10 @@ void _19tetsynthAudioProcessorEditor::sliderValueChanged(Slider* slider) {
     else if (slider == &sustainSlider) {
         info->sustainTime = slider->getValue();
         if (slider->getValue() > 98.6) {
-            sustainCutoff.color = Colours::limegreen;
+            sustainCutoff.color = Colours::lightgreen;
         }
         else {
-            sustainCutoff.color = Colours::grey;
+            sustainCutoff.color = Colours::black;
         }
     }
     else {
