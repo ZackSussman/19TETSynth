@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "ProcessorInfo.h"
+#include "SustainIndicatorLine.h"
 
 //==============================================================================
 /**
@@ -36,6 +37,9 @@ private:
     _19tetsynthAudioProcessor& processor;
     
 
+    Path adsrOutline;
+    
+    SustainIndicatorLine sustainCutoff;
     
     Slider attackSlider;
     Label attackLabel;

@@ -61,7 +61,7 @@ public:
         
         
         
-        if (isKeyDown && sustainTime == 100) {
+        if (isKeyDown && sustainTime > 98.6) {
             time = attackTime + releaseTime;
             stage = sustain;
         }

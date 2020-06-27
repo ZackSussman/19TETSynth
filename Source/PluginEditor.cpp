@@ -10,18 +10,25 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include <iostream>
 //==============================================================================
 _19tetsynthAudioProcessorEditor::_19tetsynthAudioProcessorEditor (_19tetsynthAudioProcessor& p)
     : AudioProcessorEditor (&p), processor (p)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
+    
+    
     processor.fixMyInfo(&info);
     setSize (1000, 600);
-    addAndMakeVisible(decaySlider, 0);
-    addAndMakeVisible(sustainSlider, 0);
-    addAndMakeVisible(releaseSlider, 0);
-    addAndMakeVisible(attackSlider, 0);
+    
+    addAndMakeVisible(sustainCutoff, 0);
+    sustainCutoff.setBounds(getLocalBounds());
+    
+    addAndMakeVisible(decaySlider, 1);
+    addAndMakeVisible(sustainSlider, 1);
+    addAndMakeVisible(releaseSlider, 1);
+    addAndMakeVisible(attackSlider, 1);
     addAndMakeVisible(decayLabel);
     addAndMakeVisible(sustainLabel);
     addAndMakeVisible(releaseLabel);
@@ -32,7 +39,7 @@ _19tetsynthAudioProcessorEditor::_19tetsynthAudioProcessorEditor (_19tetsynthAud
     attackSlider.setTopLeftPosition(2*getWidth()/20, 14*getHeight()/20);
     attackLabel.setText("attack", dontSendNotification);
     attackLabel.attachToComponent(&attackSlider, true);
-    attackSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxLeft, false, getWidth()/20, getHeight()/20);
+    attackSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, getWidth()/20, getHeight()/20);
     attackSlider.addListener(this);
     
 
@@ -42,7 +49,7 @@ _19tetsynthAudioProcessorEditor::_19tetsynthAudioProcessorEditor (_19tetsynthAud
     decaySlider.setTopLeftPosition(2*getWidth()/20, 15*getHeight()/20);
     decayLabel.setText("decay", dontSendNotification);
     decayLabel.attachToComponent(&decaySlider, true);
-    decaySlider.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxLeft, false, getWidth()/20, getHeight()/20);
+    decaySlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, getWidth()/20, getHeight()/20);
     decaySlider.addListener(this);
 
     sustainSlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
@@ -51,7 +58,7 @@ _19tetsynthAudioProcessorEditor::_19tetsynthAudioProcessorEditor (_19tetsynthAud
     sustainSlider.setTopLeftPosition(2*getWidth()/20, 16*getHeight()/20);
     sustainLabel.setText("sustain", dontSendNotification);
     sustainLabel.attachToComponent(&sustainSlider, true);
-    sustainSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxLeft, false, getWidth()/20, getHeight()/20);
+    sustainSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, getWidth()/20, getHeight()/20);
     sustainSlider.addListener(this);
 
     releaseSlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
@@ -60,7 +67,7 @@ _19tetsynthAudioProcessorEditor::_19tetsynthAudioProcessorEditor (_19tetsynthAud
     releaseSlider.setTopLeftPosition(2*getWidth()/20, 17*getHeight()/20);
     releaseLabel.setText("release", dontSendNotification);
     releaseLabel.attachToComponent(&releaseSlider, true);
-    releaseSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::TextBoxLeft, false, getWidth()/20, getHeight()/20);
+    releaseSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, getWidth()/20, getHeight()/20);
     releaseSlider.addListener(this);
     
     attackSlider.setValue(2);
@@ -68,8 +75,7 @@ _19tetsynthAudioProcessorEditor::_19tetsynthAudioProcessorEditor (_19tetsynthAud
     decaySlider.setValue(.1);
     sustainSlider.setValue(20);
     
-    
-    
+
 }
 
 _19tetsynthAudioProcessorEditor::~_19tetsynthAudioProcessorEditor()
@@ -81,9 +87,22 @@ void _19tetsynthAudioProcessorEditor::paint (Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
-
-    g.setColour (Colours::white);
+    g.setColour (Colours::limegreen);
     g.setFont (15.0f);
+    
+    int xAdjust = 5;
+    int upperYAdjust = 20;
+    int lowerYAdjust = 18;
+    
+    adsrOutline.clear();
+    adsrOutline.startNewSubPath(getWidth()/20 - xAdjust, 13*getHeight()/20 + upperYAdjust);
+    adsrOutline.lineTo(2*getWidth()/20 + getWidth()/5 - xAdjust, 13*getHeight()/20 + upperYAdjust);
+    adsrOutline.lineTo(2*getWidth()/20 + getWidth()/5 - xAdjust, 19*getHeight()/20 - lowerYAdjust);
+    adsrOutline.lineTo(getWidth()/20 - xAdjust, 19*getHeight()/20 - lowerYAdjust);
+    adsrOutline.closeSubPath();
+    g.strokePath(adsrOutline, PathStrokeType(3));
+    
+
     
 }
 
@@ -103,6 +122,12 @@ void _19tetsynthAudioProcessorEditor::sliderValueChanged(Slider* slider) {
     }
     else if (slider == &sustainSlider) {
         info->sustainTime = slider->getValue();
+        if (slider->getValue() > 98.6) {
+            sustainCutoff.color = Colours::limegreen;
+        }
+        else {
+            sustainCutoff.color = Colours::grey;
+        }
     }
     else {
         info->releaseTime = slider->getValue();

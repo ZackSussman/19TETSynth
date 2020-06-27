@@ -57,7 +57,7 @@ public:
         double sampleRate = getSampleRate();
         
         for (int sample = 0; sample < numSamples; ++sample) {
-            double signal = envelope->preform(.05*(double)sinf(frequency*2*M_PI*(sampleNumber/sampleRate)), isKeyDown());
+            double signal = envelope->preform(level*.05*(double)sinf(frequency*2*M_PI*(sampleNumber/sampleRate)), isKeyDown());
             
             if (signal > 1) {
                 signal = signal/abs(signal);
