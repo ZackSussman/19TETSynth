@@ -61,6 +61,8 @@ private:
     TextButton modeTwoButton;
     TextButton modeThreeButton;
     
+    
+    
     void noteOn();
     void noteOff();
     

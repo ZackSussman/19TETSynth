@@ -141,14 +141,22 @@ void _19tetsynthAudioProcessorEditor::paint (Graphics& g)
 }
 
 void _19tetsynthAudioProcessorEditor::buttonClicked(Button* button) {
+    
+
+    for (int i = 0; i < 19; i++) {
+        info->notesOn[i] = 0;
+    }
     if (&modeOneButton == button) {
         info->mode = info->SynthMode::left;
+        keys.mode = keys.SynthMode::left;
     }
     else if (button == &modeTwoButton) {
         info->mode = info->SynthMode::right;
+        keys.mode = keys.SynthMode::right;
     }
     else {
         info->mode = info->SynthMode::both;
+        keys.mode = keys.SynthMode::both;
     }
     MessageManager::getInstance()->callAsync([this](){
         keys.paintAgain();

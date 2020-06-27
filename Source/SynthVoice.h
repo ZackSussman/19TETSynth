@@ -35,7 +35,18 @@ public:
     void startNote (int midiNoteNumber, float velocity, SynthesiserSound* sound, int currentPitchWheelPosition)
     {
         envelope->beginningOfNote();
-        int note = convertMidiNumberToNineteenNumberModeOne(midiNoteNumber);
+        int note;
+        
+        if (info->mode == info->SynthMode::left) {
+            note = convertMidiNumberToNineteenNumberModeOne(midiNoteNumber);
+        }
+        else if (info->mode == info->SynthMode::right) {
+            note = convertMidiNumberToNineteenNumberModeTwo(midiNoteNumber);
+        }
+        else {
+            note = convertMidiNumberToNineteenNumberModeOne(midiNoteNumber);
+        }
+        
         info->notesOn[note] = true;
         lastNoteNumber = note;
         level = velocity;
