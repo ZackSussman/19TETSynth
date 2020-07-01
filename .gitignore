@@ -1,0 +1,5 @@
+**/Builds
+**/JuceLibraryCode
+xcuserdata/
+build/
+.DS_Store
