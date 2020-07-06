@@ -13,7 +13,6 @@
 #include <cmath>
 #include "SynthSound.h"
 #include "PluginProcessor.h"
-#include "Envelope.h"
 #include "ProcessorInfo.h"
 
 class SynthVoice : public SynthesiserVoice {
@@ -34,7 +33,6 @@ public:
  
     void startNote (int midiNoteNumber, float velocity, SynthesiserSound* sound, int currentPitchWheelPosition)
     {
-        envelope->beginningOfNote();
         int note;
         
         if (info->mode == info->SynthMode::left) {
@@ -46,7 +44,6 @@ public:
         else {
             note = convertMidiNumberToNineteenNumberModeOne(midiNoteNumber);
         }
-        
         info->notesOn[note] = true;
         lastNoteNumber = note;
         level = velocity;
@@ -59,16 +56,14 @@ public:
         else {
             frequency = 440*pow(2, ((midiNoteNumber-69)*1.0)/19);
         }
-        
         info->notifyListenersNoteOn();
-        
     }
     
     void stopNote (float velocity, bool allowTailOff) {
-        envelope->endVelope();
         clearCurrentNote();
         info->notesOn[lastNoteNumber] = false;
         info->notifyListenersNoteOff();
+        level = 0;
     }
     
     void pitchWheelMoved (int newPitchWheelValue) {
@@ -84,8 +79,9 @@ public:
         double sampleRate = getSampleRate();
         
         for (int sample = 0; sample < numSamples; ++sample) {
-            double signal = envelope->preform(level*.05*(double)sinf(frequency*2*M_PI*(sampleNumber/sampleRate)), isKeyDown());
             
+            //double signal = level*info->sinApprox(frequency*2*M_PI*((1.0*sampleNumber)/sampleRate));
+            double signal = level*sin(frequency*2*M_PI*((1.0*sampleNumber)/sampleRate));
             if (signal > 1) {
                 signal = signal/abs(signal);
             }
@@ -93,26 +89,22 @@ public:
                 outputBuffer.addSample(channel, startSample, signal);
                 //outputBuffer.addSample(channel, startSample, signal);
             }
+            if (sampleNumber*1.0/sampleRate == 1) {
+                sampleNumber = -1;
+            }
             sampleNumber++;
             ++startSample;
-            envelope->update();
- 
         }
-        
-        envelope->changeAttackTime(info->getAttackTime());
-        envelope->changeDecayTime(info->getDecayTime());
-        envelope->changeSustainTime(info->getSustainTime());
-        envelope->changeReleaseTime(info->getReleaseTime());
     }
     
 public:
     ProcessorInfo* info;
     
+    
 private:
-    double level = 0.5;
+    double level = 0;
     double frequency = 440;
     int sampleNumber = 0;
-    Envelope* envelope = new Envelope(2, 1, .1, .8, 50, 2, 0);
     int lastNoteNumber = 0;
     
     

@@ -112,8 +112,6 @@ void _19tetsynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPer
     ignoreUnused(samplesPerBlock);
     lastSampleRate = sampleRate;
     synth.setCurrentPlaybackSampleRate(lastSampleRate);
-    
-    
 }
 
 void _19tetsynthAudioProcessor::releaseResources()

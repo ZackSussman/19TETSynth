@@ -9,13 +9,36 @@
 */
 
 #pragma once
+#include <cmath>
 
+class EnvelopeInfo {
+
+public:
+    EnvelopeInfo() {
+        attackTime = .2;
+        decayTime = .2;
+        sustainTime = 20;
+        releaseTime = .2;
+        
+        attackAmp = 1;
+        sustainAmp = .8;
+    }
+    
+    double attackTime;
+    double decayTime;
+    double sustainTime;
+    double releaseTime;
+    
+    double attackAmp;
+    double sustainAmp;
+};
 
 
 class ProcessorInfo {
 
 public:
     enum SynthMode {left, right, both};
+    
     class Listener {
     
     public:
@@ -28,27 +51,10 @@ public:
     
     
     ProcessorInfo(){}
-    
-    
-    double getAttackTime() {
-        return attackTime;
-    }
-    double getReleaseTime() {
-        return releaseTime;
-    }
-    double getSustainTime() {
-        return sustainTime;
-    }
-    double getDecayTime() {
-        return decayTime;
-    }
-    
-    double attackTime = 2;
-    double decayTime = .1;
-    double releaseTime = 2;
-    double sustainTime = 30;
-    
+
     SynthMode mode = left;
+    
+    EnvelopeInfo envelopeInfo;
     
     bool notesOn[19] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     
