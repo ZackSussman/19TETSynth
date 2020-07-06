@@ -13,13 +13,13 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "ProcessorInfo.h"
-#include "SustainIndicatorLine.h"
 #include "PianoKeys.h"
+#include "EnvelopeGraphic.h"
 
 //==============================================================================
 /**
 */
-class _19tetsynthAudioProcessorEditor  : public AudioProcessorEditor, public Slider::Listener, public ProcessorInfo::Listener, public Button::Listener
+class _19tetsynthAudioProcessorEditor  : public AudioProcessorEditor, public ProcessorInfo::Listener, public Button::Listener, public Slider::Listener
 
 {
 public:
@@ -30,7 +30,6 @@ public:
     void paint (Graphics&) override;
     void resized() override;
     ProcessorInfo* info;
-    void sliderValueChanged(Slider* slider) override;
     void buttonClicked(Button* button) override;
 
 private:
@@ -38,12 +37,11 @@ private:
     // access the processor object that created it.
     _19tetsynthAudioProcessor& processor;
     
-
+    int sliderXShift = 35;
+    
     Path adsrOutline;
     
     Path modesOutline;
-    
-    SustainIndicatorLine sustainCutoff;
     
     Slider attackSlider;
     Label attackLabel;
@@ -61,11 +59,34 @@ private:
     TextButton modeTwoButton;
     TextButton modeThreeButton;
     
+    EnvelopeGraphic envelopeGraphic;
+    
+    Path envelopeBorderPath;
+    
+    Slider attackTimeSlider;
+    Label attackTimeLabel;
+    
+    Slider decayTimeSlider;
+    Label decayTimeLabel;
+    
+    Slider sustainTimeSlider;
+    Label sustainTimeLabel;
+    
+    Slider releaseTimeSlider;
+    Label releaseTimeLabel;
     
     
-    void noteOn();
+    Slider attackAmpSlider;
+    Label attackAmpLabel;
+    
+    Slider sustainAmpSlider;
+    Label sustainAmpLabel;
+    
+    
+    void noteOn() ;
     void noteOff();
     
+    void sliderValueChanged(Slider* slider) override;
     
     PianoKeys keys;
     

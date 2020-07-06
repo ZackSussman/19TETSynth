@@ -21,62 +21,10 @@ _19tetsynthAudioProcessorEditor::_19tetsynthAudioProcessorEditor (_19tetsynthAud
     processor.fixMyInfo(&info);
     setSize (1000, 600);
     
-    addAndMakeVisible(sustainCutoff, 0);
-    sustainCutoff.setBounds(getLocalBounds());
-    
     info->addListener(this);
     modeOneButton.addListener(this);
     modeTwoButton.addListener(this);
     modeThreeButton.addListener(this);
-    addAndMakeVisible(decaySlider, 1);
-    addAndMakeVisible(sustainSlider, 1);
-    addAndMakeVisible(releaseSlider, 1);
-    addAndMakeVisible(attackSlider, 1);
-    addAndMakeVisible(decayLabel);
-    addAndMakeVisible(sustainLabel);
-    addAndMakeVisible(releaseLabel);
-    addAndMakeVisible(attackLabel);
-    attackSlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
-    attackSlider.setRange(0.1, 100, .1);
-    attackSlider.setSize(getWidth()/5, getHeight()/20);
-    attackSlider.setTopLeftPosition(2*getWidth()/20, 14*getHeight()/20);
-    attackLabel.setText("attack", dontSendNotification);
-    attackLabel.attachToComponent(&attackSlider, true);
-    attackSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, getWidth()/20, getHeight()/20);
-    attackSlider.addListener(this);
-    
-
-    decaySlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
-    decaySlider.setRange(0.1, 100, .1);
-    decaySlider.setSize(getWidth()/5, getHeight()/20);
-    decaySlider.setTopLeftPosition(2*getWidth()/20, 15*getHeight()/20);
-    decayLabel.setText("decay", dontSendNotification);
-    decayLabel.attachToComponent(&decaySlider, true);
-    decaySlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, getWidth()/20, getHeight()/20);
-    decaySlider.addListener(this);
-
-    sustainSlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
-    sustainSlider.setRange(0.1, 100, .1);
-    sustainSlider.setSize(getWidth()/5, getHeight()/20);
-    sustainSlider.setTopLeftPosition(2*getWidth()/20, 16*getHeight()/20);
-    sustainLabel.setText("sustain", dontSendNotification);
-    sustainLabel.attachToComponent(&sustainSlider, true);
-    sustainSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, getWidth()/20, getHeight()/20);
-    sustainSlider.addListener(this);
-
-    releaseSlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
-    releaseSlider.setRange(0.1, 100, .1);
-    releaseSlider.setSize(getWidth()/5, getHeight()/20);
-    releaseSlider.setTopLeftPosition(2*getWidth()/20, 17*getHeight()/20);
-    releaseLabel.setText("release", dontSendNotification);
-    releaseLabel.attachToComponent(&releaseSlider, true);
-    releaseSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, getWidth()/20, getHeight()/20);
-    releaseSlider.addListener(this);
-    
-    attackSlider.setValue(2);
-    releaseSlider.setValue(2);
-    decaySlider.setValue(.1);
-    sustainSlider.setValue(20);
     
     addAndMakeVisible(keys, 0);
     keys.setBounds(getLocalBounds());
@@ -97,6 +45,89 @@ _19tetsynthAudioProcessorEditor::_19tetsynthAudioProcessorEditor (_19tetsynthAud
     modeTwoButton.setTopLeftPosition(5*getWidth()/7 + 20, 13*getHeight()/20 + +20 + (-38 + 6*getHeight()/20)/3);
     modeThreeButton.setTopLeftPosition(5*getWidth()/7 + 20, 13*getHeight()/20 +  + 20 + 2*(-38 + 6*getHeight()/20)/3);
     
+    addAndMakeVisible(envelopeGraphic);
+    envelopeGraphic.setSize(.6*1.5*getWidth()/4, getHeight()/6 + 20);
+    envelopeGraphic.setTopLeftPosition(getWidth()/6 - 80, 5*getHeight()/6 - 80);
+    
+    
+    addAndMakeVisible(attackTimeSlider);
+    addAndMakeVisible(decayTimeSlider);
+    addAndMakeVisible(releaseTimeSlider);
+    addAndMakeVisible(sustainTimeSlider);
+    addAndMakeVisible(attackTimeLabel);
+    addAndMakeVisible(decayTimeLabel);
+    addAndMakeVisible(releaseTimeLabel);
+    addAndMakeVisible(sustainTimeLabel);
+    
+    addAndMakeVisible(attackAmpSlider);
+    addAndMakeVisible(sustainAmpSlider);
+    addAndMakeVisible(attackAmpLabel, -1);
+    addAndMakeVisible(sustainAmpLabel, -1);
+  
+    attackTimeSlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
+    attackTimeSlider.setSize(getHeight()/7, getWidth()/20);
+    attackTimeLabel.setText("at", dontSendNotification);
+    attackTimeLabel.attachToComponent(&attackTimeSlider, true);
+    attackTimeSlider.setTopLeftPosition(getWidth()/2 - 30 - sliderXShift, 12*getHeight()/20 + 50);
+    attackTimeSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    
+    
+    decayTimeSlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
+    decayTimeSlider.setSize(getHeight()/7, getWidth()/20);
+    decayTimeLabel.setText("dt", dontSendNotification);
+    decayTimeLabel.attachToComponent(&decayTimeSlider, true);
+    decayTimeSlider.setTopLeftPosition(getWidth()/2 - 30 - sliderXShift, 13*getHeight()/20 + 50);
+    decayTimeSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    
+    sustainTimeSlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
+    sustainTimeSlider.setSize(getHeight()/7, getWidth()/20);
+    sustainTimeLabel.setText("st", dontSendNotification);
+    sustainTimeLabel.attachToComponent(&sustainTimeSlider, true);
+    sustainTimeSlider.setTopLeftPosition(getWidth()/2 - 30 - sliderXShift, 14*getHeight()/20 + 50);
+    sustainTimeSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    
+    releaseTimeSlider.setSliderStyle(Slider::SliderStyle::LinearHorizontal);
+    releaseTimeSlider.setSize(getHeight()/7, getWidth()/20);
+    releaseTimeLabel.setText("rt", dontSendNotification);
+    releaseTimeLabel.attachToComponent(&releaseTimeSlider, true);
+    releaseTimeSlider.setTopLeftPosition(getWidth()/2 - 30 - sliderXShift, 15*getHeight()/20 + 50);
+    releaseTimeSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox, false, 0, 0);
+    
+    
+    
+    attackAmpSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
+    attackAmpSlider.setSize(getWidth()/20, 2*getHeight()/9);
+    attackAmpSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox , true, 0, 0);
+    attackAmpSlider.setTopLeftPosition(getWidth()/2 + 50 - sliderXShift, 12*getHeight()/20 + 50);
+    attackAmpLabel.setSize(getHeight()/20, getHeight()/20);
+    attackAmpLabel.setTopLeftPosition(getWidth()/2 - sliderXShift + 50 + getWidth()/40 - 9, 12*getHeight()/20 + 50 + 2*getHeight()/9 - 10);
+    attackAmpLabel.setText("a", dontSendNotification);
+    
+    
+    sustainAmpSlider.setSliderStyle(Slider::SliderStyle::LinearVertical);
+    sustainAmpSlider.setSize(getWidth()/20, 2*getHeight()/9);
+    sustainAmpSlider.setTextBoxStyle(Slider::TextEntryBoxPosition::NoTextBox , true, 0, 0);
+    sustainAmpSlider.setTopLeftPosition(getWidth()/2 + 50 + 30 - sliderXShift, 12*getHeight()/20 + 50);
+    sustainAmpLabel.setSize(getHeight()/20, getHeight()/20);
+    sustainAmpLabel.setTopLeftPosition(30 + - sliderXShift + getWidth()/2 + 50 + getWidth()/40 - 9, 12*getHeight()/20 + 50 + 2*getHeight()/9 - 10);
+    sustainAmpLabel.setText("s", dontSendNotification);
+    
+    attackTimeSlider.addListener(this);
+    decayTimeSlider.addListener(this);
+    sustainTimeSlider.addListener(this);
+    releaseTimeSlider.addListener(this);
+    
+    attackAmpSlider.addListener(this);
+    sustainAmpSlider.addListener(this);
+
+    sustainAmpSlider.setRange(0, 1);
+    attackAmpSlider.setRange(0, 1);
+    
+    attackTimeSlider.setValue(.2);
+    decayTimeSlider.setValue(.2);
+    sustainTimeSlider.setValue(3);
+    releaseTimeSlider.setValue(.2);
+    
 }
 
 
@@ -113,19 +144,6 @@ void _19tetsynthAudioProcessorEditor::paint (Graphics& g)
     g.setColour (Colours::limegreen);
     g.setFont (15.0f);
     
-    int xAdjust = 5;
-    int upperYAdjust = 20;
-    int lowerYAdjust = 18;
-    
-    adsrOutline.clear();
-    adsrOutline.startNewSubPath(getWidth()/20 - xAdjust, 13*getHeight()/20 + upperYAdjust);
-    adsrOutline.lineTo(2*getWidth()/20 + getWidth()/5 - xAdjust, 13*getHeight()/20 + upperYAdjust);
-    adsrOutline.lineTo(2*getWidth()/20 + getWidth()/5 - xAdjust, 19*getHeight()/20 - lowerYAdjust);
-    adsrOutline.lineTo(getWidth()/20 - xAdjust, 19*getHeight()/20 - lowerYAdjust);
-    adsrOutline.closeSubPath();
-    g.strokePath(adsrOutline, PathStrokeType(3));
-    
-    
     modesOutline.clear();
     modesOutline.startNewSubPath(5*getWidth()/7 + 20, 13*getHeight()/20 + 20);
     modesOutline.lineTo(getWidth()/8 + 5*getWidth()/7 + 20, 13*getHeight()/20 + 20);
@@ -138,6 +156,11 @@ void _19tetsynthAudioProcessorEditor::paint (Graphics& g)
         keys.notesOn[index] = info->notesOn[index];
     }
     
+    g.setColour(Colours::red);
+    envelopeBorderPath.clear();
+    envelopeBorderPath.startNewSubPath(getWidth()/6 - 80 - 20, getHeight()/6 + 20 + 5*getHeight()/6 - 80);
+    envelopeBorderPath.lineTo(getWidth()/6 - 80 + .6*1.5*getWidth()/4 + 20, getHeight()/6 + 20 + 5*getHeight()/6 - 80);
+    g.strokePath(envelopeBorderPath, PathStrokeType(4));
 }
 
 void _19tetsynthAudioProcessorEditor::buttonClicked(Button* button) {
@@ -169,6 +192,32 @@ void _19tetsynthAudioProcessorEditor::noteOn() {
     });
 }
 
+void _19tetsynthAudioProcessorEditor::sliderValueChanged(Slider* slider) {
+   
+    envelopeGraphic.updateValues(attackTimeSlider.getValue(), decayTimeSlider.getValue(), sustainTimeSlider.getValue(), releaseTimeSlider.getValue(), attackAmpSlider.getValue(), sustainAmpSlider.getValue());
+    
+    info->envelopeInfo.attackTime = attackSlider.getValue();
+    info->envelopeInfo.decayTime = decaySlider.getValue();
+    info->envelopeInfo.sustainTime = sustainSlider.getValue();
+    info->envelopeInfo.releaseTime = releaseSlider.getValue();
+    
+    info->envelopeInfo.attackAmp = attackAmpSlider.getValue();
+    info->envelopeInfo.sustainAmp = sustainAmpSlider.getValue();
+    
+    
+    if (slider == &attackAmpSlider) {
+        sustainAmpSlider.setRange(0, attackAmpSlider.getValue());
+    }
+    if (slider == &sustainAmpSlider) {
+        attackAmpSlider.setRange(sustainAmpSlider.getValue(), 1);
+        
+    }
+    
+    
+    
+    
+}
+
 void _19tetsynthAudioProcessorEditor::noteOff() {
     MessageManager::getInstance()->callAsync([this](){
         keys.paintAgain();
@@ -179,27 +228,4 @@ void _19tetsynthAudioProcessorEditor::resized()
 {
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
-}
-
-void _19tetsynthAudioProcessorEditor::sliderValueChanged(Slider* slider) {
-    
-    if (slider == &attackSlider) {
-        info->attackTime = slider->getValue();
-    }
-    else if (slider == &decaySlider) {
-        info->decayTime = slider->getValue();
-    }
-    else if (slider == &sustainSlider) {
-        info->sustainTime = slider->getValue();
-        if (slider->getValue() > 98.6) {
-            sustainCutoff.color = Colours::lightgreen;
-        }
-        else {
-            sustainCutoff.color = Colours::black;
-        }
-    }
-    else {
-        info->releaseTime = slider->getValue();
-    }
-    
 }
